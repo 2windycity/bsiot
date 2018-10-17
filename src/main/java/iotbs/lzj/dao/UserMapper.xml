@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="iotbs.lzj.dao.UserMapper">
+	<resultMap type="iotbs.lzj.bean.User" id="BaseResultMap">
+		<id column="UserId" property="userId" jdbcType="INTEGER"/>
+		 <result column="UserName" property="userName" jdbcType="VARCHAR" />
+		 <result column="sex" property="sex" jdbcType="VARCHAR" />
+		 <result column="age" property="age" jdbcType="INTEGER" />
+		 <result column="UserPhone" property="userPhone" jdbcType="VARCHAR" />
+		  <result column="HomeNum" property="homeNum" jdbcType="VARCHAR" />
+		   <result column="Build_Id" property="buildId" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="ListIndexUser" resultMap="BaseResultMap">
+		select * from user 
+	</select>
+	<!-- 根据用户ID查找单个用户信息 -->
+	<select id="selectUserByBid" resultMap="BaseResultMap" parameterType="Integer">
+	 select * from user where UserId=#{v}
+	</select>
+	<!-- 查找所有的栋号 -->
+	<select id="listBuildId" resultType="Integer">
+		select BuildId from building
+	</select>
+	
+	<!-- 添加用户信息 -->
+	<insert id="insertUser" parameterType="iotbs.lzj.bean.User">
+		insert into User (UserName,sex,age,UserPhone,HomeNum,Build_Id)
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userName != null">
+				#{userName},
+			</if>
+			<if test="sex != null">
+				#{sex},
+			</if>
+			<if test="age != null">
+				#{age},
+			</if>
+			<if test="userPhone != null">
+				#{userPhone},
+			</if>
+			<if test="homeNum != null">
+				#{homeNum},
+			</if>
+			<if test="buildId != null">
+				#{buildId}
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据用户ID删除用户信息 -->
+	<delete id="deleteUserById" parameterType="Integer">
+		delete from User where UserId=#{v}
+	</delete>
+	
+	<!-- 根据用户ID修改信息 -->
+	<update id="updateUserById" parameterType="iotbs.lzj.bean.User">
+		update User
+		<set>
+			<if test="userName != null">
+				UserName=#{userName},
+			</if>
+			<if test="sex != null">
+				sex=#{sex},
+			</if>
+			<if test="age != null">
+				age=#{age},
+			</if>
+			<if test="userPhone != null">
+				UserPhone=#{userPhone},
+			</if>
+			<if test="homeNum != null">
+				HomeNum=#{homeNum},
+			</if>
+			<if test="buildId != null">
+				Build_Id=#{buildId},
+			</if>
+		</set>
+		where UserId=#{userId}
+	</update>
+</mapper>
